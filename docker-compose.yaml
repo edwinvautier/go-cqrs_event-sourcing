@@ -1,0 +1,12 @@
+version: "3"
+
+services: 
+  go:
+    container_name: "go-back-end"
+    build: .
+    volumes:
+      - ".:/go/src"
+    ports:
+      - "8000:8080"
+    tty: true
+    stdin_open: true
