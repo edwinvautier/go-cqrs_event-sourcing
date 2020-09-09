@@ -1,15 +1,15 @@
 package main
 
 import (
-	// "context"
-	// "log"
+	"log"
 
-	// "github.com/lana/go-commandbus"
 	"github.com/gin-gonic/gin"
+	"github.com/edwinvautier/go-cqrs_event-sourcing/routes"
 )
 
 func main() {
 	router := gin.Default()
+	routes.SetupRouter(router)
 
-	router.Run(":8000")
+	log.Fatal(router.Run(":8000"))
 }
