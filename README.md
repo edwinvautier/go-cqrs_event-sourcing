@@ -25,3 +25,9 @@ go build -o main .
 go build -o main .
 ./main
 ```
+
+# Archi
+
+Controller va passer la requête au service et créer un retour
+
+Le service va faire les check applicatifs (content-type, authentification, deserialization...)
