@@ -12,9 +12,9 @@ import (
 // }
 
 func Send(cmd c.Command) c.Command{
-	if cmd.Type == "UserCreate" {
+	switch cmd.Type {
+	case "UserCreate":
 		cmd.Data = handlers.UserCreateCommandHandler(cmd)
-		cmd.Type = "NewUser"
 	}
 
 	return cmd

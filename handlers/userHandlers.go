@@ -7,7 +7,7 @@ import (
 )
 
 // UserCreateCommandHandler is the command handler for a new user
-func UserCreateCommandHandler(cmd c.Command) models.User {
+func UserCreateCommandHandler(cmd c.Command) *models.User {
 	userForm := cmd.Data.(forms.UserForm)
 	var u models.User
 	u.Name = userForm.Name
@@ -15,5 +15,5 @@ func UserCreateCommandHandler(cmd c.Command) models.User {
 	//fmt.Println(reflect.ValueOf(cmd.Data).Type())
 	models.CreateUser(&u)
 
-	return u
+	return &u
 }
