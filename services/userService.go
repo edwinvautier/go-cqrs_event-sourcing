@@ -1,8 +1,7 @@
 package services
 
 import (
-	"github.com/edwinvautier/go-cqrs_event-sourcing/bus"
-	cmd "github.com/edwinvautier/go-cqrs_event-sourcing/commands"
+	"github.com/edwinvautier/go-cqrs_event-sourcing/domain"
 	"github.com/edwinvautier/go-cqrs_event-sourcing/forms"
 	"github.com/edwinvautier/go-cqrs_event-sourcing/models"
 	"github.com/gin-gonic/gin"
@@ -10,7 +9,6 @@ import (
 
 func CreateUser(c *gin.Context) (*models.User, error) {
 	var userForm forms.UserForm
-	var userCreateCommand cmd.Command
 	var user *models.User
 
 	// Bind the request data to userForm type
@@ -18,18 +16,22 @@ func CreateUser(c *gin.Context) (*models.User, error) {
 		return nil, err
 	}
 
+	// Validate user
 	err := forms.ValidateUser(userForm)
 	if err != nil {
 		return nil, err
 	}
 
 	// Create a command and send it to the commandbus
-	userCreateCommand.Data = userForm
-	userCreateCommand.Type = "UserCreate"
-	
-	// Send data to the bus
-	userCreateCommand = bus.Send(userCreateCommand)
+	var command domain.CreateUserCommand
+	command.Name = userForm.Name
+	command.Email = userForm.Email
 
-	user = userCreateCommand.Data.(*models.User)
+	u, err := domain.CommandBus.Dispatch(command)
+	if err != nil {
+		return nil, err
+	}
+	user = u.(*models.User)
+
 	return user, nil
 }

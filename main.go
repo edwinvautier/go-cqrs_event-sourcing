@@ -7,7 +7,7 @@ import (
 	"github.com/caarlos0/env/v6"
 	"github.com/edwinvautier/go-cqrs_event-sourcing/routes"
 	"github.com/edwinvautier/go-cqrs_event-sourcing/models"
-	// "github.com/edwinvautier/go-cqrs_event-sourcing/bus"
+	"github.com/edwinvautier/go-cqrs_event-sourcing/domain"
 )
 
 type config struct {
@@ -29,10 +29,10 @@ func main() {
 	models.InitializeDb(cfg.DbUser, cfg.DbPassword, cfg.DbHost, cfg.DbName, cfg.DbPort)
 	models.MakeMigrations()
 
+	domain.InitBus()
+
 	router := gin.Default()
 	routes.SetupRouter(router)
-
-	// bus.Init()
 
 	log.Fatal(router.Run(":8000"))
 }
