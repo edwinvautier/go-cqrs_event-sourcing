@@ -9,6 +9,6 @@ var cmdB cqrs.CommandBus
 var CommandBus = cmdB.New()
 
 func InitBus() {
-	CommandBus.Register(CreateUserCommand{}, UserCreateCommandHandler{})
+	CommandBus.Register(CreateUserCommand{}, CreateUserCommandHandler{})
 	fmt.Println("Bus ready to accept messages")
 }

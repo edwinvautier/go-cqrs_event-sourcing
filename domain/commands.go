@@ -16,9 +16,9 @@ func (c CreateUserCommand) Payload() interface{} {
 }
 
 // User create command handler
-type UserCreateCommandHandler struct {}
+type CreateUserCommandHandler struct {}
 
-func (ch UserCreateCommandHandler) Handle(cmd cqrs.Command) (interface{}, error){
+func (ch CreateUserCommandHandler) Handle(cmd cqrs.Command) (interface{}, error){
 	cmdUser := cmd.Payload().(*CreateUserCommand)
 	
 	var u models.User
