@@ -7,4 +7,8 @@ import (
 
 func SetupRouter(r *gin.Engine) {
 	r.POST("/users", controllers.CreateUser)
+	r.GET("/users", controllers.GetUsers)
+	r.GET("/users/:id", controllers.GetUserById)
+	r.PUT("/users/:id", controllers.EditUserById)
+	r.DELETE("/users/:id", controllers.DeleteUserById)
 }
