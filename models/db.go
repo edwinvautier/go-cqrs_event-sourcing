@@ -25,5 +25,5 @@ func InitializeDb(user string, password string, host string, name string, port i
 
 // MakeMigrations executes migrations once the db is connected
 func MakeMigrations() {
-	db.AutoMigrate(&User{})
+	db.AutoMigrate(&Event{})
 }

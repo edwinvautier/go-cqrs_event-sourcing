@@ -25,15 +25,15 @@ type GetUserByIdQueryHandler struct {}
 
 func (ch GetUsersQueryHandler) Handle(query cqrs.Query) (interface{}, error){
 	switch query.Payload().(type) {
-	case *GetUsersQuery:
-		var u *[]models.User
+	// case *GetUsersQuery:
+		// var u *[]models.User
 
-		u, err := models.GetUsers()
-		if err != nil {
-			fmt.Println("Error : ", err.Error())
-			return nil, nil
-		}
-		return u, nil
+		// u, err := models.GetUsers()
+		// if err != nil {
+		// 	fmt.Println("Error : ", err.Error())
+		// 	return nil, nil
+		// }
+		// return u, nil
 
 	default:
 		return nil, errors.New("bad command type")
@@ -43,14 +43,15 @@ func (ch GetUsersQueryHandler) Handle(query cqrs.Query) (interface{}, error){
 func (ch GetUserByIdQueryHandler) Handle(query cqrs.Query) (interface{}, error){
 	switch qr := query.Payload().(type) {
 	case *GetUserByIdQuery:
-		var u *models.User
+		var u models.User
+		userEvents, err := models.GetUserEventsById(qr.Id)
+		u, err = models.GetUserFromEvents(userEvents)
 
-		u, err := models.GetUserById(qr.Id)
 		if err != nil {
 			fmt.Println("Error : ", err.Error())
-			return nil, nil
+			return nil, err
 		}
-		return u, nil
+		return &u, nil
 
 	default:
 		return nil, errors.New("bad command type")
