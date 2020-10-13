@@ -97,3 +97,19 @@ func GetUserEventsById(id uint64) ([]Event, error) {
 
 	return events, nil
 }
+
+type SmallEvent struct {
+	ID uint64
+}
+
+func GetAllUserCreateEvents() ([]SmallEvent, error) {
+	var err error
+	var createEvents []SmallEvent
+
+	err = db.Debug().Raw("SELECT id FROM events WHERE name = 'createUser'").Scan(&createEvents).Error
+	if err != nil {
+		return []SmallEvent{}, err
+	}
+
+	return createEvents, nil
+}

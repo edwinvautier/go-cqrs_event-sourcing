@@ -25,15 +25,30 @@ type GetUserByIdQueryHandler struct {}
 
 func (ch GetUsersQueryHandler) Handle(query cqrs.Query) (interface{}, error){
 	switch query.Payload().(type) {
-	// case *GetUsersQuery:
-		// var u *[]models.User
+	case *GetUsersQuery:
+		// get create events
+		createEvents, err := models.GetAllUserCreateEvents()
+		if err != nil {
+			return nil, err
+		}
+		// loop
+		var users []models.User
 
-		// u, err := models.GetUsers()
-		// if err != nil {
-		// 	fmt.Println("Error : ", err.Error())
-		// 	return nil, nil
-		// }
-		// return u, nil
+		for _, event := range createEvents {
+			uEvents, err := models.GetUserEventsById(event.ID)
+			if err != nil {
+				fmt.Println("Error: ", err)
+				continue
+			}
+			u, err := models.GetUserFromEvents(uEvents)
+			if err != nil {
+				continue
+			}
+			users = append(users, u)
+		}
+
+		// return users
+		return &users, nil
 
 	default:
 		return nil, errors.New("bad command type")
