@@ -1,7 +1,6 @@
 package models
 
 import (
-	"fmt"
 	"encoding/json"
 	"errors"
 )
@@ -28,6 +27,6 @@ func GetUserFromEvents(events []Event) (User, error) {
 			return u, errors.New("User deleted")
 		}
 	}
-	
+
 	return u, nil
 }
