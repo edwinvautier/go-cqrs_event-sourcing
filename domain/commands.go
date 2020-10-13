@@ -42,10 +42,10 @@ func (ch CreateUserCommandHandler) Handle(command cqrs.Command) (interface{}, er
 			Email: cmd.Email,
 		}
 
-		_, err := models.CreateUser(&u)
+		err := models.CreateUserEvent(&u)
 		if err != nil {
 			fmt.Println("Error : ", err.Error())
-			return nil, nil
+			return nil, err
 		}
 		return &u, nil
 	default:
@@ -61,10 +61,10 @@ func (ch EditUserCommandHandler) Handle(command cqrs.Command) (interface{}, erro
 			Email: cmd.Email,
 		}
 
-		_, err := models.EditUserById(cmd.Id, &u)
+		err := models.EditUserEvent(&u, cmd.Id)
 		if err != nil {
 			fmt.Println("Error : ", err.Error())
-			return nil, nil
+			return nil, err
 		}
 		return &u, nil
 	default:
@@ -75,10 +75,10 @@ func (ch EditUserCommandHandler) Handle(command cqrs.Command) (interface{}, erro
 func (ch DeleteUserCommandHandler) Handle(command cqrs.Command) (interface {}, error) {
 	switch cmd := command.Payload().(type) {
 	case *DeleteUserCommand:
-		err := models.DeleteUserById(cmd.Id)
+		err := models.DeleteUserEvent(cmd.Id)
 		if err != nil {
 			fmt.Println("Error : ", err.Error())
-			return nil, nil
+			return nil, err
 		}
 		return nil, nil
 	default:
