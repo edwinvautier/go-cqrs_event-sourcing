@@ -1,7 +1,9 @@
 package models
 
 import (
+	"fmt"
 	"encoding/json"
+	"errors"
 )
 type Event struct {
 	ID 			uint64 			`gorm:"primary_key"`
@@ -35,6 +37,9 @@ func CreateUserEvent(user *User) error {
 }
 
 func EditUserEvent(user *User, id uint64) error {
+	if UserNotExists(id) {
+		return errors.New("User doesn't exist")
+	}
 	var err error
 
 	payload, err := json.Marshal(user)
@@ -112,4 +117,25 @@ func GetAllUserCreateEvents() ([]SmallEvent, error) {
 	}
 
 	return createEvents, nil
+}
+
+func UserNotExists(id uint64) bool {
+	var err error
+	var event Event
+	
+	// check if id exists
+	err = db.Debug().Where(id).First(&event).Error
+	if err != nil {
+		fmt.Println(err)
+		return true
+	}
+	
+	// check if deleted
+	err = db.Debug().Raw("SELECT * FROM events WHERE name = 'deleteUser' AND aggregate_id = ?", id).Scan(&event).Error
+	if err != nil {
+		fmt.Println("no delete found : ",err)
+		return false
+	}
+
+	return true
 }
